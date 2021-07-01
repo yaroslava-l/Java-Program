@@ -15,49 +15,47 @@ public class Controller {
 
     // The Work method
     public void processUser(){
-        int generatedNumber = model.getNumber();
-        int userNumber;
 
         Scanner sc = new Scanner(System.in);
+
+        model.setPrimaryBarrier(GlobalConstants.MIN_BARRIER, GlobalConstants.MAX_BARRIER);
+        model.generateNumber();
+
         view.printMessage(View.INPUT_NUMBER);
 
-        do {
-            userNumber = sc.nextInt();
-            model.addUserNumbers(userNumber);
-        } while (!isWin(userNumber, generatedNumber));
+        while (model.checkValue(inputIntValueWithScanner(sc)));
+
+        view.printMessage(View.WIN + model.getNumber());
+        view.printMessage(View.STATISTICS + model.getUserNumbers());
+
 
     }
 
-    private boolean isWin(int userNumber, int generatedNumber) {
-        if (userNumber == generatedNumber){
-            view.printMessage(View.WIN);
-            view.printStatistics(View.STATISTICS, model.getUserNumbers());
-            return true;
-        } else {
-            changeRange(userNumber);
-            view.printMessage(View.WRONG_ANSWER);
-            view.printMessage(View.INPUT_INT_VALUE_IN_RANGE, model.getMinNumber(), model.getMaxNumber());
-            return false;
-        }
-    }
-
-    private void changeRange(int userNumber) {
-        if(isInputCorrect(userNumber)) {
-
-            if (userNumber < model.getNumber()) {
-                model.setMinNumber(userNumber);
-            } else {
-                model.setMaxNumber(userNumber);
+    private int inputIntValueWithScanner(Scanner sc) {
+        int res = 0;
+        view.printMessage(getInputIntMessage());
+        while (true) {
+            // check int-value
+            while (!sc.hasNextInt()) {
+                view.printMessage(View.INCORRECT_INPUT + getInputIntMessage());
+                sc.next();
             }
+            // check value into diapason
+            if ((res = sc.nextInt()) <= model.getMinBarrier() ||
+                    res >= model.getMaxBarrier()) {
+                view.printMessage(View.INCORRECT_INPUT + getInputIntMessage());
+                continue;
+            }
+            break;
         }
+        return res;
     }
 
-    private boolean isInputCorrect(int number) {
-        if(number < model.getMaxNumber() && number > model.getMinNumber()) {
-            return true;
-        } else {
-            view.printMessage(View.INCORRECT_INPUT);
-           return false;
-        }
+    private String getInputIntMessage() {
+        return view.printMessage(
+                View.INPUT_INT_VALUE_IN_RANGE, View.SPACE_SING,
+                String.valueOf(model.getMinBarrier()), View.SPACE_SING,
+                String.valueOf(model.getMaxBarrier()), View.SPACE_SING);
     }
+
 }

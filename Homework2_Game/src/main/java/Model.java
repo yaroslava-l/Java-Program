@@ -3,58 +3,65 @@ import java.util.List;
 import java.util.Random;
 
 public class Model {
-    // The Constants
-    public static final  int MIN_VALUE = 0;
-    public static final  int MAX_VALUE = 100;
+    // Data
+    private int minBarrier;
+    private int maxBarrier;
 
-    private int minNumber;
-    private int maxNumber;
     private int number;
+
     private List<Integer> userNumbers = new ArrayList<>();
 
-    public Model() {
-        minNumber = MIN_VALUE;
-        maxNumber = MAX_VALUE ;
-        this.number = rand(minNumber, maxNumber);
+    public void generateNumber() {
+        number = (int)Math.ceil(Math.random()*
+                (maxBarrier - minBarrier - 1) + minBarrier);
     }
 
-    public static int rand(int min, int max) {
-        Random random = new Random();
-        return random.nextInt(max - min - 1) + min;
+    public void setPrimaryBarrier(int minBarrier, int maxBarrier){
+        this.minBarrier = minBarrier;
+        this.maxBarrier = maxBarrier;
     }
 
-    public static int rand() {
-        Random random = new Random();
-        return random.nextInt(Integer.MAX_VALUE);
+    public boolean checkValue (int value){
+        userNumbers.add(value);
+        if (value == number){
+            return false;
+        } else if (value > number){
+            maxBarrier = value;
+        } else {
+            minBarrier = value;
+        }
+        return true;
     }
 
-    public int getMinNumber() {
-        return minNumber;
+    public int getMinBarrier() {
+        return minBarrier;
     }
 
-    public void setMinNumber(int minNumber) {
-        this.minNumber = minNumber;
+    public void setMinBarrier(int minBarrier) {
+        this.minBarrier = minBarrier;
     }
 
-    public int getMaxNumber() {
-        return maxNumber;
+    public int getMaxBarrier() {
+        return maxBarrier;
     }
 
-    public void setMaxNumber(int maxNumber) {
-        this.maxNumber = maxNumber;
+    public void setMaxBarrier(int maxBarrier) {
+        this.maxBarrier = maxBarrier;
     }
 
     public int getNumber() {
         return number;
     }
 
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     public List<Integer> getUserNumbers() {
         return userNumbers;
     }
 
-    public void addUserNumbers(int number) {
-        userNumbers.add(number);
+    public void setUserNumbers(List<Integer> userNumbers) {
+        this.userNumbers = userNumbers;
     }
-
-
 }

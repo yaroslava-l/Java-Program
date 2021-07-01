@@ -8,16 +8,18 @@ public class View {
     public final static String WRONG_ANSWER = "Wrong answer! Try again!\n";
     public final static String WIN = "That's the right number! You win!\n";
     public final static String STATISTICS = "Statistics:";
+    public static final String SPACE_SING = " ";
 
     public void printMessage(String message) {
         System.out.print(message);
     }
 
-    public void printMessage(String message, int param1, int param2) {
-        System.out.printf("%s %s - %s.\n ", message, param1, param2);
+    public String printMessage(String... message) {
+        StringBuilder concatString = new StringBuilder();
+        for (String v : message){
+            concatString = concatString.append(v);
+        }
+        return new String(concatString);
     }
 
-    public void printStatistics(String message, List<Integer> userNumbers) {
-        System.out.printf("%s %s.\n ", message, userNumbers);
-    }
 }
